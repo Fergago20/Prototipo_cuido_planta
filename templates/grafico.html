@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gráfico de Datos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-white text-black p-6">
+    <h1 class="text-3xl text-[#4B0000] font-bold mb-4">Visualización de Datos</h1>
+
+    <div class="mb-4">
+        <label class="mr-2">Desde:</label>
+        <input type="date" id="fechaInicio" class="border border-gray-300 p-2 rounded"/>
+        <label class="ml-4 mr-2">Hasta:</label>
+        <input type="date" id="fechaFin" class="border border-gray-300 p-2 rounded"/>
+        <button onclick="actualizarGrafico()" class="ml-4 bg-[#4B0000] text-white px-4 py-2 rounded hover:bg-black">Actualizar</button>
+    </div>
+
+    <canvas id="grafico" class="w-full max-w-4xl mx-auto"></canvas>
+
+    <script src="{{ url_for('static', filename='js/grafico.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Historial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-black p-6">
+    <h1 class="text-3xl text-[#4B0000] font-bold mb-4">Historial de Datos</h1>
+
+    <form method="get" action="/historial_filtrado" class="mb-6 flex flex-wrap gap-2">
+        <input name="fechaprimera" type="date" class="border border-gray-300 p-2 rounded" required />
+        <input name="fechasegunda" type="date" class="border border-gray-300 p-2 rounded" required />
+        <button type="submit" class="bg-[#4B0000] text-white px-4 py-2 rounded hover:bg-black">Filtrar</button>
+    </form>
+
+    {% if error %}
+        <p class="text-red-600">{{ error }}</p>
+    {% elif datos %}
+        <table class="w-full border border-gray-300">
+            <thead class="bg-[#4B0000] text-white">
+                <tr>
+                    {% for key in datos[0].keys() %}
+                        <th class="p-2 border">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for dato in datos %}
+                    <tr class="hover:bg-gray-100">
+                        {% for value in dato.values() %}
+                            <td class="p-2 border">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-gray-600">No hay datos para mostrar.</p>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/historial.js') }}"></script>
+</body>
+</html>
