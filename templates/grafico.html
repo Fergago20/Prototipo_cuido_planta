@@ -6,6 +6,12 @@
     <title>Gráfico de Datos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {% if datos %}
+    <script>
+    const datos = {{ datos|tojson }};
+    </script>
+    {% endif %}
 </head>
 <body class="bg-white text-black p-6">
     <h1 class="text-3xl text-[#4B0000] font-bold mb-4">Visualización de Datos</h1>
@@ -18,9 +24,27 @@
         <button onclick="actualizarGrafico()" class="ml-4 bg-[#4B0000] text-white px-4 py-2 rounded hover:bg-black">Actualizar</button>
     </div>
 
+    {% if error %}
+        <div class="text-red-600 mb-4">{{ error }}</div>
+    {% endif %}
+
     <canvas id="grafico" class="w-full max-w-4xl mx-auto"></canvas>
 
-    <script src="{{ url_for('static', filename='js/grafico.js') }}"></script>
+    <script>
+        function actualizarGrafico() {
+            const desde = document.getElementById('fechaInicio').value;
+            const hasta = document.getElementById('fechaFin').value;
 
+            if (!desde || !hasta) {
+                alert("Por favor, selecciona ambas fechas.");
+                return;
+            }
+
+            const url = `/grafico?fechaprimera=${desde}&fechasegunda=${hasta}`;
+            window.location.href = url;
+        }
+    </script>
+
+    <script src="{{ url_for('static', filename='grafico.js') }}"></script>
 </body>
 </html>

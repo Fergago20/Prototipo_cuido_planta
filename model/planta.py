@@ -1,8 +1,10 @@
+from datetime import datetime
 class EstadoPlanta:
     def __init__(self):
         self.datos= {}
 
     def obtener_datos(self, humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision):
+
         self.datos = {
             'humedad': humedad,
             'temperatura_ambiente': temperatura_ambiente,

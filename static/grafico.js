@@ -1,5 +1,6 @@
 let chart;
-
+console.log("Grafico cargado correctamente");
+console.log("Datos recibidos:", datos);
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof datos === "undefined") return;
 

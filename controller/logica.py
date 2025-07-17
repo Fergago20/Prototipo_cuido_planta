@@ -1,6 +1,7 @@
 from model.archivos import GuardarArchivos
 from model.planta import EstadoPlanta
 from controller.bluetooth import BluetoothLogica
+from datetime import datetime
 
 class Logica:
     def __init__(self):
@@ -18,10 +19,10 @@ class Logica:
         self.estado_planta.obtener_datos(humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision)
         datos = str(self.estado_planta.retornar_datos())
         datos = datos.replace("'", "").replace("[", "").replace("]", "").replace(" ", "")
+        enviar = datos
         datos = ',' + datos
-        print(datos)
         self.archivos.guardar(datos)
-        return datos
+        return True, enviar
 
     def obtener_datos(self):
         datos = self.archivos.cargar()
@@ -39,12 +40,13 @@ class Logica:
                 } for i in range(largo)
             ]
             
-        
-    def estado(self):
-        return self.estado_planta.retornar_datos()
     
     def datos_filtrados_fecha(self, fechaprimera, fechasegunda ):
         datos = self.obtener_datos()
+        fechaprimera = fechaprimera + '-00:00:00'
+        fechasegunda = fechasegunda + '-23:59:59'
+        fechaprimera = datetime.strptime(fechaprimera, "%Y-%m-%d-%H:%M:%S")
+        fechasegunda = datetime.strptime(fechasegunda, "%Y-%m-%d-%H:%M:%S")
         if datos:
-            return [dato for dato in datos if fechaprimera <= dato['fecha_revision'] <= fechasegunda]
+            return [dato for dato in datos if fechaprimera <= datetime.strptime(dato['fecha_revision'], "%Y-%m-%d-%H:%M:%S") <= fechasegunda]
             

@@ -35,7 +35,7 @@ class BluetoothLogica:
 
         try:
             datos = self.ser.readline().decode('utf-8').strip()
-            datos = datos + ',' + time.strftime('%Y-%m-%d %H:%M:%S')
+            datos = datos + ',' + time.strftime('%Y-%m-%d-%H:%M:%S')
             return True, datos
         except serial.SerialException as e:
             return False, str(e)
