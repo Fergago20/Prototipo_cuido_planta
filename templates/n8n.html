@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>n8n Webhook Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white shadow-2xl rounded-2xl p-8 max-w-xl w-full">
+        <h1 class="text-3xl font-bold text-[#7b1f33] mb-6 text-center">Interfaz Webhook - n8n</h1>
+
+        <form id="enviar-form" class="space-y-4">
+            <h2 class="text-xl font-semibold text-gray-700">📤 Enviar Datos</h2>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" required
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b1f33]">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Mensaje:</label>
+                <input type="text" id="mensaje" name="mensaje" required
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b1f33]">
+            </div>
+
+            <button type="submit"
+                    class="bg-[#7b1f33] text-white w-full py-2 rounded-lg hover:bg-[#611726] transition">
+                Enviar a n8n
+            </button>
+        </form>
+
+        <hr class="my-6">
+
+        <div class="space-y-4">
+            <h2 class="text-xl font-semibold text-gray-700">📥 Obtener Datos</h2>
+
+            <input type="text" id="workflow_id" placeholder="ID del Workflow"
+                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b1f33]">
+
+            <button id="obtener-btn"
+                    class="bg-[#7b1f33] text-white w-full py-2 rounded-lg hover:bg-[#611726] transition">
+                Obtener desde n8n
+            </button>
+        </div>
+
+        <div class="mt-6">
+            <h3 class="text-lg font-semibold text-gray-700">📋 Respuesta</h3>
+            <pre id="respuesta" class="bg-gray-100 border border-gray-300 rounded-lg p-4 mt-2 text-sm overflow-auto max-h-64"></pre>
+        </div>
+    </div>
+
+    <script src="/static/chat.js"></script>
+</body>
+</html>

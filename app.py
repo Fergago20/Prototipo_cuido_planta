@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify, render_template
 from controller.bluetooth import BluetoothLogica
 from controller.logica import Logica
+from controller.n8n import N8nLogica
 app = Flask(__name__)
 bluetooth_logica = BluetoothLogica()
 logica = Logica()
+n8n = N8nLogica(base_url='http://localhost:5678')  
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -55,6 +58,30 @@ def grafico():
         print("Datos para el gráfico:", datos)
         return render_template('grafico.html', datos=datos)
     return render_template('grafico.html', error='No se encontraron datos para el gráfico')
+
+@app.route('/enviar_datos', methods=['GET'])
+def enviar_datos():
+    render_template('n8n.html')
+    data = logica.obtener_datos()
+    data = jsonify(data)
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+    response = n8n.enviar_datos(data)
+    if response is None:
+        return jsonify({'error': 'Failed to send data to n8n'}), 500
+
+    return jsonify({'message': 'Data sent successfully', 'response': response}), 200
+
+@app.route('/obtener_dados', methods=['GET'])
+def obter_dados():
+    workflow_id = request.args.get('workflow_id')
+    if not workflow_id:
+        return jsonify({'error': 'Workflow ID is required'}), 400
+    response = n8n.obtener_datos(workflow_id)
+    if response is None:
+        return jsonify({'error': f'Failed to get data for workflow {workflow_id}'}), 500
+
+    return jsonify({'message': 'Data retrieved successfully', 'data': response}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
