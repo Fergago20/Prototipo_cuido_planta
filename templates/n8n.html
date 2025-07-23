@@ -1,55 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>n8n Webhook Interface</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interfaz N8N</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{{ url_for('static', filename='chat.js') }}" defer></script>
+  <style>
+    :root {
+      --vino: #7B1E3B;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
-    <div class="bg-white shadow-2xl rounded-2xl p-8 max-w-xl w-full">
-        <h1 class="text-3xl font-bold text-[#7b1f33] mb-6 text-center">Interfaz Webhook - n8n</h1>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center justify-center p-6">
+  <div class="w-full max-w-2xl shadow-xl rounded-2xl p-8 bg-white border-t-8" style="border-color: var(--vino);">
+    <h1 class="text-3xl font-semibold mb-4 text-center" style="color: var(--vino);">Panel de Comunicación N8N</h1>
+    
+    <div class="flex flex-col gap-4">
+      <button id="btnEnviar" class="bg-[var(--vino)] text-white px-6 py-3 rounded-lg shadow hover:bg-red-900 transition-all">
+        Enviar Datos a N8N
+      </button>
 
-        <form id="enviar-form" class="space-y-4">
-            <h2 class="text-xl font-semibold text-gray-700">📤 Enviar Datos</h2>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-600">Usuario:</label>
-                <input type="text" id="usuario" name="usuario" required
-                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b1f33]">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-600">Mensaje:</label>
-                <input type="text" id="mensaje" name="mensaje" required
-                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b1f33]">
-            </div>
-
-            <button type="submit"
-                    class="bg-[#7b1f33] text-white w-full py-2 rounded-lg hover:bg-[#611726] transition">
-                Enviar a n8n
-            </button>
-        </form>
-
-        <hr class="my-6">
-
-        <div class="space-y-4">
-            <h2 class="text-xl font-semibold text-gray-700">📥 Obtener Datos</h2>
-
-            <input type="text" id="workflow_id" placeholder="ID del Workflow"
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b1f33]">
-
-            <button id="obtener-btn"
-                    class="bg-[#7b1f33] text-white w-full py-2 rounded-lg hover:bg-[#611726] transition">
-                Obtener desde n8n
-            </button>
-        </div>
-
-        <div class="mt-6">
-            <h3 class="text-lg font-semibold text-gray-700">📋 Respuesta</h3>
-            <pre id="respuesta" class="bg-gray-100 border border-gray-300 rounded-lg p-4 mt-2 text-sm overflow-auto max-h-64"></pre>
-        </div>
+      <div>
+        <label for="workflowId" class="block text-sm font-medium text-gray-700">Workflow ID:</label>
+        <input type="text" id="workflowId" placeholder="Ingrese el workflow ID"
+               class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[var(--vino)] focus:border-[var(--vino)]">
+      </div>
+      <button id="btnObtener" class="bg-[var(--vino)] text-white px-6 py-3 rounded-lg shadow hover:bg-red-900 transition-all">
+        Obtener Datos de N8N
+      </button>
     </div>
 
-    <script src="/static/chat.js"></script>
+    <div id="responseBox" class="mt-6 p-4 bg-gray-100 rounded-md text-sm text-gray-700 whitespace-pre-wrap border border-[var(--vino)] hidden"></div>
+  </div>
 </body>
 </html>

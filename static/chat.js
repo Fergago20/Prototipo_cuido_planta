@@ -1,36 +1,35 @@
-document.getElementById("enviar-form").addEventListener("submit", function (e) {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+  const btnEnviar = document.getElementById('btnEnviar');
+  const btnObtener = document.getElementById('btnObtener');
+  const responseBox = document.getElementById('responseBox');
 
-    const datos = {
-        usuario: document.getElementById("usuario").value,
-        mensaje: document.getElementById("mensaje").value
-    };
+  btnEnviar.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/enviar_datos');
+      const data = await res.json();
+      mostrarRespuesta(data);
+    } catch (err) {
+      mostrarRespuesta({ error: 'Error al enviar datos a N8N' });
+    }
+  });
 
-    fetch("/enviar_datos", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(datos)
-    })
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById("respuesta").textContent = JSON.stringify(data, null, 2);
-    })
-    .catch(err => {
-        document.getElementById("respuesta").textContent = "Error al enviar: " + err;
-    });
-});
+  btnObtener.addEventListener('click', async () => {
+    const workflowId = document.getElementById('workflowId').value;
+    if (!workflowId.trim()) {
+      return mostrarRespuesta({ error: 'Debe ingresar un workflow ID' });
+    }
 
-document.getElementById("obtener-btn").addEventListener("click", function () {
-    const workflowId = document.getElementById("workflow_id").value;
+    try {
+      const res = await fetch(`/obtener_dados?workflow_id=${encodeURIComponent(workflowId)}`);
+      const data = await res.json();
+      mostrarRespuesta(data);
+    } catch (err) {
+      mostrarRespuesta({ error: 'Error al obtener datos de N8N' });
+    }
+  });
 
-    fetch(`/obtener_dados?workflow_id=${encodeURIComponent(workflowId)}`)
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("respuesta").textContent = JSON.stringify(data, null, 2);
-        })
-        .catch(err => {
-            document.getElementById("respuesta").textContent = "Error al obtener datos: " + err;
-        });
+  function mostrarRespuesta(data) {
+    responseBox.classList.remove('hidden');
+    responseBox.textContent = JSON.stringify(data, null, 2);
+  }
 });
