@@ -5,7 +5,7 @@ from controller.n8n import N8nLogica
 app = Flask(__name__)
 bluetooth_logica = BluetoothLogica()
 logica = Logica()
-n8n = N8nLogica(base_url='http://localhost:5678')  
+n8n = N8nLogica()  
 
 @app.route('/')
 def index():
@@ -62,8 +62,19 @@ def grafico():
 @app.route('/enviar_datos', methods=['GET'])
 def enviar_datos():
     render_template('n8n.html')
-    data = logica.obtener_datos()
-    data = jsonify(data)
+    data = logica.guardar_datos()
+    if not data[0]:
+        return jsonify({'error': data[1]}), 400
+    #datos de prueba
+    data = data[1]
+    data = {
+        'humedad': data[0],
+        'temperatura_ambiente': data[1],
+        'temperatura_objeto': data[2],
+        'humedad_suelo': data[3],
+        'fecha_revision': data[4]
+    }
+
     if not data:
         return jsonify({'error': 'No data provided'}), 400
     response = n8n.enviar_datos(data)

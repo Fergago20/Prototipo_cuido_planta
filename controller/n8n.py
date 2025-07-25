@@ -1,13 +1,13 @@
 import requests
 
 class N8nLogica:
-    def __init__(self, base_url: str):
-        self.base_url = base_url
+    def __init__(self):
+        self.base_url = "https://grupoowc-dev-n8n.h9fjgm.easypanel.host/webhook/iaecobot"
     
     def enviar_datos(self, datos: dict):
-        url = f"{self.base_url}/webhook"
+        
         try:
-            response = requests.post(url, json=datos)
+            response = requests.post(self.base_url, json=datos)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -15,9 +15,8 @@ class N8nLogica:
             return None
         
     def obtener_datos(self, workflow_id: str):
-        url = f"{self.base_url}/workflow/{workflow_id}"
         try:
-            response = requests.get(url)
+            response = requests.get(self.base_url)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
