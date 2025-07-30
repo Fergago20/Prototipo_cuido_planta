@@ -5,33 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interfaz N8N</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="{{ url_for('static', filename='chat.js') }}" defer></script>
   <style>
     :root {
       --vino: #7B1E3B;
     }
+    .spin {
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center justify-center p-6">
-  <div class="w-full max-w-2xl shadow-xl rounded-2xl p-8 bg-white border-t-8" style="border-color: var(--vino);">
-    <h1 class="text-3xl font-semibold mb-4 text-center" style="color: var(--vino);">Panel de Comunicación N8N</h1>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-800 min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-3xl shadow-2xl rounded-3xl p-10 bg-white border-t-8" style="border-color: var(--vino);">
+    <h1 class="text-4xl font-bold mb-6 text-center" style="color: var(--vino);">Panel de Comunicación con N8N</h1>
     
-    <div class="flex flex-col gap-4">
-      <button id="btnEnviar" class="bg-[var(--vino)] text-white px-6 py-3 rounded-lg shadow hover:bg-red-900 transition-all">
-        Enviar Datos a N8N
+    <div class="flex flex-col gap-6">
+      <!-- Botón Enviar -->
+      <button id="btnEnviar" class="bg-[var(--vino)] text-white px-6 py-3 text-lg font-semibold rounded-lg shadow hover:bg-red-900 transition-all flex items-center justify-center gap-2">
+        <span>📤 Enviar Datos a N8N</span>
+        <span id="spinner" class="w-5 h-5 border-2 border-white rounded-full hidden spin"></span>
+      </button>
+      <button class="bg-[var(--vino)] text-white px-6 py-3 text-lg font-semibold rounded-lg shadow hover:bg-red-900 transition-all flex items-center justify-center gap-2"> 
+        <a href="/" class="block bg-[#4B0000] text-white px-6 py-2 rounded-lg hover:bg-black text-center">
+                Volver al Inicio
+            </a>
       </button>
 
-      <div>
-        <label for="workflowId" class="block text-sm font-medium text-gray-700">Workflow ID:</label>
-        <input type="text" id="workflowId" placeholder="Ingrese el workflow ID"
-               class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[var(--vino)] focus:border-[var(--vino)]">
-      </div>
-      <button id="btnObtener" class="bg-[var(--vino)] text-white px-6 py-3 rounded-lg shadow hover:bg-red-900 transition-all">
-        Obtener Datos de N8N
-      </button>
-    </div>
-
-    <div id="responseBox" class="mt-6 p-4 bg-gray-100 rounded-md text-sm text-gray-700 whitespace-pre-wrap border border-[var(--vino)] hidden"></div>
-  </div>
-</body>
-</html>
+      <script src="{{ url_for('static', filename='chat.js') }}"></script>
+    </body>
+    </html>

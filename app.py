@@ -61,38 +61,47 @@ def grafico():
 
 @app.route('/enviar_datos', methods=['GET'])
 def enviar_datos():
-    render_template('n8n.html')
-    data = logica.guardar_datos()
-    if not data[0]:
+    # Obtener y validar los datos
+    resultado = logica.guardar_datos()
+    if not resultado[0]:
         return jsonify({'error': data[1]}), 400
-    #datos de prueba
-    data = data[1]
-    data = {
-        'humedad': data[0],
-        'temperatura_ambiente': data[1],
-        'temperatura_objeto': data[2],
-        'humedad_suelo': data[3],
-        'fecha_revision': data[4]
+
+    resultado = resultado[1]
+    humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = resultado.split(',')
+    datos = {
+        'humedad': humedad,
+        'temperatura_ambiente': temperatura_ambiente,
+        'temperatura_objeto': temperatura_objeto,
+        'humedad_suelo': humedad_suelo,
+        'fecha_revision': fecha_revision
     }
 
-    if not data:
-        return jsonify({'error': 'No data provided'}), 400
-    response = n8n.enviar_datos(data)
+    print("Enviando datos a n8n:", datos)
+
+    # Enviar a N8N
+    response = n8n.enviar_datos(datos)
     if response is None:
         return jsonify({'error': 'Failed to send data to n8n'}), 500
 
-    return jsonify({'message': 'Data sent successfully', 'response': response}), 200
+    return jsonify({
+        'message': 'Datos enviados correctamente',
+        'datos_enviados': datos,
+        'respuesta_n8n': response
+    }), 200
 
-@app.route('/obtener_dados', methods=['GET'])
-def obter_dados():
-    workflow_id = request.args.get('workflow_id')
-    if not workflow_id:
-        return jsonify({'error': 'Workflow ID is required'}), 400
-    response = n8n.obtener_datos(workflow_id)
-    if response is None:
-        return jsonify({'error': f'Failed to get data for workflow {workflow_id}'}), 500
 
-    return jsonify({'message': 'Data retrieved successfully', 'data': response}), 200
+@app.route('/n8n', methods=['GET'])
+def vista_n8n():
+    return render_template('n8n.html')
+
+@app.route('/exito_datos')
+def exito_datos():
+    return render_template('exito_datos.html')
+
+@app.route('/error_datos')
+def error_datos():
+    return render_template('error_datos.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

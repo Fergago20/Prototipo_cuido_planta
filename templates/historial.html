@@ -39,6 +39,11 @@
     {% else %}
         <p class="text-gray-600">No hay datos para mostrar.</p>
     {% endif %}
+    <button class="bg-[var(--vino)] text-white px-6 py-3 text-lg font-semibold rounded-lg shadow hover:bg-red-900 transition-all flex items-center justify-center gap-2"> 
+        <a href="/" class="block bg-[#4B0000] text-white px-6 py-2 rounded-lg hover:bg-black text-center">
+                Volver al Inicio
+            </a>
+      </button>
     <script src="{{ url_for('static', filename='js/historial.js') }}"></script>
 </body>
 </html>
