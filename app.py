@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify, render_template
 from controller.bluetooth import BluetoothLogica
 from controller.logica import Logica
 from controller.n8n import N8nLogica
+import time
+
+
 app = Flask(__name__)
 bluetooth_logica = BluetoothLogica()
 logica = Logica()
@@ -19,16 +22,21 @@ def datos_actuales():
         return render_template('datos_actuales.html', datos=None, error=resultado[1])
 
     try:
+        
         resultado = resultado[1]
-        humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = resultado.split(',')
-        datos = {
-            'humedad': humedad,
-            'temperatura_ambiente': temperatura_ambiente,
-            'temperatura_objeto': temperatura_objeto,
-            'humedad_suelo': humedad_suelo,
-            'fecha_revision': fecha_revision
-        }
-        return render_template('datos_actuales.html', datos=datos)
+        if len(resultado.split(',')) == 5:
+            humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = resultado.split(',')
+            datos = {
+                'humedad': humedad,
+                'temperatura_ambiente': temperatura_ambiente,
+                'temperatura_objeto': temperatura_objeto,
+                'humedad_suelo': humedad_suelo,
+                'fecha_revision': fecha_revision
+            }
+            return render_template('datos_actuales.html', datos=datos)
+        else:
+            return render_template('datos_actuales.html', datos=None, error="Datos incompletos o inválidos")
+            
     except Exception as e:
         return render_template('datos_actuales.html', datos=None, error="Error al procesar los datos: " + str(e))
 
@@ -64,7 +72,7 @@ def enviar_datos():
     # Obtener y validar los datos
     resultado = logica.guardar_datos()
     if not resultado[0]:
-        return jsonify({'error': data[1]}), 400
+        return jsonify({'error': resultado[1]}), 400
 
     resultado = resultado[1]
     humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = resultado.split(',')
@@ -76,7 +84,6 @@ def enviar_datos():
         'fecha_revision': fecha_revision
     }
 
-    print("Enviando datos a n8n:", datos)
 
     # Enviar a N8N
     response = n8n.enviar_datos(datos)
@@ -102,6 +109,28 @@ def exito_datos():
 def error_datos():
     return render_template('error_datos.html')
 
+@app.route('/vigilante', methods=['GET'])
+def vigilante():
+    try:
+        while True:
+            resultado = logica.guardar_datos()
+            if resultado[0]:
+                datos = resultado[1]
+                humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = datos.split(',')
+                datos_dict = {
+                    'humedad': humedad,
+                    'temperatura_ambiente': temperatura_ambiente,
+                    'temperatura_objeto': temperatura_objeto,
+                    'humedad_suelo': humedad_suelo,
+                    'fecha_revision': fecha_revision
+                }
+                n8n.enviar_datos(datos_dict)
+                return render_template('vigilante.html', datos=datos_dict)
+            else:
+                return render_template('error_datos.html', error="Datos inválidos o no disponibles")
+            time.sleep(300)
+    except Exception as e:
+        return render_template('error_datos.html', error=str(e))
 
 if __name__ == '__main__':
     app.run(debug=True)
