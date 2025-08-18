@@ -14,16 +14,17 @@ class Logica:
         if datos[0] is False:
             return False, "No se recibieron datos del dispositivo Bluetooth"
         datos = datos[1]
-        datos = datos.replace("'", "").replace("[", "").replace("]", "").replace(" ", "")
-        humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = datos.split(',')
-        self.estado_planta.obtener_datos(humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision)
-        datos = str(self.estado_planta.retornar_datos())
-        datos = datos.replace("'", "").replace("[", "").replace("]", "").replace(" ", "")
-        enviar = datos
-        datos = ',' + datos
-        self.archivos.guardar(datos)
-        return True, enviar
-
+        if len(datos.split(',')) == 5:
+            datos = datos.replace("'", "").replace("[", "").replace("]", "").replace(" ", "")
+            humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision = datos.split(',')
+            self.estado_planta.obtener_datos(humedad, temperatura_ambiente, temperatura_objeto, humedad_suelo, fecha_revision)
+            datos = str(self.estado_planta.retornar_datos())
+            datos = datos.replace("'", "").replace("[", "").replace("]", "").replace(" ", "")
+            enviar = datos
+            datos = ',' + datos
+            self.archivos.guardar(datos)
+            return True, enviar
+        return False, "Datos incompletos o inválidos"
     def obtener_datos(self):
         datos = self.archivos.cargar()
         if datos:

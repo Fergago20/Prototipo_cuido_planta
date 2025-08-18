@@ -69,7 +69,7 @@ def grafico():
 
 @app.route('/enviar_datos', methods=['GET'])
 def enviar_datos():
-    # Obtener y validar los datos
+   
     resultado = logica.guardar_datos()
     if not resultado[0]:
         return jsonify({'error': resultado[1]}), 400

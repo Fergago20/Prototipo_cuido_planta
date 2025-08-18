@@ -1,16 +1,32 @@
 import serial
 import time
+import serial.tools.list_ports
+
 class BluetoothLogica:
     def __init__(self):
-        self.puerto = 'COM15'
+        self.puerto = None
         self.baudrate = 9600
         self.ser = None
+
+    def detectar_puerto(self):
+        puertos = serial.tools.list_ports.comports()
+        for puerto in puertos:
+            if "Bluetooth" in puerto.description or "Standard Serial" in puerto.description:
+                return puerto.device
+        return None
 
     def conectar(self):
         try:
             if self.ser is None or not self.ser.is_open:
+                if self.puerto is None:
+                    self.puerto = self.detectar_puerto()
+
+                if self.puerto is None:
+                    return False, "No se encontró ningún dispositivo Bluetooth conectado"
+
                 self.ser = serial.Serial(self.puerto, self.baudrate, timeout=2)
-            return True, "Conexión establecida"
+
+            return True, f"Conexión establecida en {self.puerto}"
         except serial.SerialException as e:
             return False, str(e)
 
