@@ -3,7 +3,7 @@ import time
 
 class BluetoothLogica:
     def __init__(self):
-        self.puerto = "COM15"   # Puerto fijo
+        self.puerto = "COM5"   
         self.baudrate = 9600
         self.ser = None
 
@@ -13,6 +13,7 @@ class BluetoothLogica:
                 self.ser = serial.Serial(self.puerto, self.baudrate, timeout=2)
             return True, f"Conexión establecida en {self.puerto}"
         except serial.SerialException as e:
+            print("No conectado")
             return False, f"Error al conectar: {e}"
 
     def enviar_datos(self, mensaje="Solicitar datos"):
@@ -29,11 +30,9 @@ class BluetoothLogica:
         estado, mensaje_conexion = self.conectar()
         if not estado:
             return False, mensaje_conexion
-
         enviado, mensaje_envio = self.enviar_datos()
         if not enviado:
             return False, mensaje_envio
-
         try:
             datos = self.ser.readline().decode("utf-8", errors="ignore").strip()
             datos = datos + "," + time.strftime("%Y-%m-%d-%H:%M:%S")
