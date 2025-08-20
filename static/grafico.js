@@ -1,6 +1,7 @@
 let chart;
-console.log("Grafico cargado correctamente");
+console.log("Gráfico cargado correctamente");
 console.log("Datos recibidos:", datos);
+
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof datos === "undefined") return;
 
@@ -32,34 +33,34 @@ function renderChart(labels, h, tA, tO, hS) {
             labels,
             datasets: [
                 {
-                    label: "Humedad (%)",
+                    label: "🌱 Humedad (%)",
                     data: h,
-                    borderColor: '#4B0000',
-                    backgroundColor: 'rgba(75, 0, 0, 0.2)',
+                    borderColor: '#2e7d32',
+                    backgroundColor: 'rgba(46, 125, 50, 0.2)',
                     fill: true,
                     tension: 0.4
                 },
                 {
-                    label: "Temperatura Ambiente (°C)",
+                    label: "🌤️ Temp. Ambiente (°C)",
                     data: tA,
-                    borderColor: '#333333',
-                    backgroundColor: 'rgba(51, 51, 51, 0.2)',
+                    borderColor: '#66bb6a',
+                    backgroundColor: 'rgba(102, 187, 106, 0.2)',
                     fill: true,
                     tension: 0.4
                 },
                 {
-                    label: "Temperatura Objeto (°C)",
+                    label: "🔥 Temp. Objeto (°C)",
                     data: tO,
-                    borderColor: '#8B0000',
-                    backgroundColor: 'rgba(139, 0, 0, 0.2)',
+                    borderColor: '#388e3c',
+                    backgroundColor: 'rgba(56, 142, 60, 0.2)',
                     fill: true,
                     tension: 0.4
                 },
                 {
-                    label: "Humedad Suelo (%)",
+                    label: "🌾 Humedad Suelo (%)",
                     data: hS,
-                    borderColor: '#B22222',
-                    backgroundColor: 'rgba(178, 34, 34, 0.2)',
+                    borderColor: '#1b5e20',
+                    backgroundColor: 'rgba(27, 94, 32, 0.2)',
                     fill: true,
                     tension: 0.4
                 }
@@ -67,14 +68,30 @@ function renderChart(labels, h, tA, tO, hS) {
         },
         options: {
             responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "#1b5e20", // color verde oscuro en las leyendas
+                        font: {
+                            weight: "bold"
+                        }
+                    }
+                }
+            },
             interaction: {
                 mode: 'index',
                 intersect: false,
             },
             stacked: false,
             scales: {
+                x: {
+                    ticks: { color: "#2e7d32" }, // verde en el eje X
+                    grid: { color: "rgba(46, 125, 50, 0.1)" }
+                },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: { color: "#2e7d32" }, // verde en el eje Y
+                    grid: { color: "rgba(46, 125, 50, 0.1)" }
                 }
             }
         }
